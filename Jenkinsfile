@@ -17,6 +17,19 @@ pipeline{
                bat 'mvn package'
             }
         }
+         stage ('SonarQube Analysis') {
+        steps{
+            script{
+                withSonarQubeEnv('sonarqube-8.9.2') {
+                    sonarCredentials = credentials('sqp_d6070991b3dc34365964f6afc7bff12d4f853755')
+                             withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarqube')]) {
+                                 bat 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=root'
+                             }
+                }
+            }
+        }
+        }
+
         
 }
     }
